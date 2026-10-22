@@ -1,21 +1,8 @@
-# 85p.
-print( type("안녕하세요") )     #<class 'str'>
-print( type (123)) # <class 'int'>
-print ( type (1.23)) # <class 'float'>
-print ( type (True)) # <class 'bool'>
-print ( type(None)) # <class 'NoneType'>
-print(type([]))  # <class 'list'>
-print(type({}))  # <class 'dict'>
-print(type(()))  # <class 'tuple'>
+# p.104 숫자연산자 
+print( 5+7 , 5-7 , 5*7 , 5/7)
+print(3//2 , 3%2 , 3**4)
+print( 5 + 3 * 2 )
+print((5+3)*2)
+print( 2 + 2 - 2 * 2 / 2 * 2)
 
-
-# 86p. 문자열 만들기 
-print("ABC") # 큰 따옴표로 감싸기 
-print('ABC') # 작은 따옴표로 감싸기 
-print( """ A
-    B
-C""" )
-
-print("A'b'c")
-print('a"b"c')
-print("\"a\'b\nc\td\\e")
+print(15, "+" , "=" , 15+4)
