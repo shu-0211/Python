@@ -1,6 +1,3 @@
-import pandas as pd
-df = pd.read_csv( './train.csv')
-
 # Python 데이터분석 Practice6: 종합예제1
 # 문제1 [ 타이타닉 생존 데이터 분석]
 # 출처: Kaggle - Titanic: Machine Learning from Disaster
@@ -13,10 +10,15 @@ df = pd.read_csv( './train.csv')
 # [3. 자료수집 ]
 # 3-1 : https://www.kaggle.com/competitions/titanic/overview
 # 3-2 : train.csv 파일 판다스로 불러오기 
+import pandas as pd
+df = pd.read_csv( './train.csv')
+
 
 # [4. 데이터 전처리]
 # 수치형 결측치 보정: '나이(Age)' 컬럼의 결측치는 이상치에 강건한(Robust) 분석을 위해 중앙값(Median)으로 대체해야 한다.
+df['Age'] = df['Age'].fillna(df['Age'].median())
 # 범주형 결측치 보정: '승선 항구(Embarked)' 컬럼의 결측치는 가장 빈번하게 등장하는 최빈값(Mode)으로 대체해야 한다.
+df['Embarked'] = df['Embarked'].fillna(df['Embarked'].mode()[0])
 
 # [5. 데이터 시각화 및 분석]
 # 5-1 : 생존 분포 분석: 전체 생존자와 사망자의 비중을 파악할 수 있는 막대그래프 를 생성한다.
@@ -26,7 +28,6 @@ import seaborn as sns
 # 윈도우 기준 한글 폰트 설정 및 마이너스 부호 깨짐 방지
 plt.rc('font', family='Malgun Gothic')
 plt.rcParams['axes.unicode_minus'] = False
-
 # 시본 기본 테마 적용 (폰트 설정 유지)
 sns.set_theme(font='Malgun Gothic', rc={'axes.unicode_minus': False}, style='whitegrid')
 

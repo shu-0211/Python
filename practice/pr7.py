@@ -25,6 +25,7 @@ async def run() :
             
             for i in range(3) :
                 next_page = page.locator(f'a[href="javascript:fetch_point_list({count+1})"]')
+                page_list = await page.query_selector_all('.pagination > .page a')
                 await page.wait_for_timeout(1500)
                 items = await page.query_selector_all(".list_with_upthumb_item")
                   
@@ -37,8 +38,9 @@ async def run() :
                     rating= await rating.inner_text() if rating else '별점없음'
                     item_list.append({'제목' : title , "이미지링크" : img , '별점' : rating} )
 
-                await next_page.click()
                 count += 1
+                await page_list[count].click()
+                
 
             await browser.close()
             return item_list
