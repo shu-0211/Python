@@ -67,3 +67,43 @@ print('r2 : ' , r2_score(Y_test , Y_pred))  # r2_score( 정답지 , 예측값)
 #  r2 :  0.0727666321391145
 # *] 모델 구현에서 다양한 속성값( degree = N ) 들을 테스트 하여 설계 /구현한다. 
 # *] 특성이 너무 많아지면 훈련 데이터가 과하게 집학하여 과대 적합이 발생하여 점수가 낮아진다. 
+
+#===============================================================================================
+# 4] 특성이 많아짐에 따라 특성간의 단위 표준화 ( 0~1 )
+from sklearn.preprocessing import StandardScaler
+ss = StandardScaler()   # 객체 생성
+ss.fit( X_train_poly ) # 항이 추가된 특성으로 표준화 
+X_train_scaled = ss.transform( X_train_poly )
+X_test_scaled = ss.transform( X_test_poly)
+print( X_train_poly[0])     # [ 16.2          4.5924    ~ ]
+print( X_train_scaled[0])  # [-1.14878727 -1.06273398 -1. ~ ]
+
+#===============================================================================================
+# 5]  규제 : 기울기( 가중치 ) 크기에 패널티를 부여 하여 특성 오차 확인하여 특성 완만/제외
+# 1) 릿지 
+from sklearn.linear_model import Ridge
+# 2) alpha( 규제강도 ) : 값이 커질수록 가중치 / 기울기를 0에 가깝게 규제 : 완만 
+# 반복하여 최적의 규제 강도 찾기 
+alpha_list = [ 0.001 , 0.01 , 0.1 , 1, 10 , 100 ]
+for alpha in alpha_list : 
+    model = Ridge( alpha = alpha )  # 강도 설정하여 릿지 모델 객체 생성
+    model.fit( X_train_scaled, Y_train ) # 학습 
+    # 학습데이터 점수와 테스트용 점수차이 
+    print( alpha ,"---------훈련용 학습 데이터 점수 vs 테스트용 학습 데이터 점수")
+    print("Train R2 : ", model.score( X_train_scaled, Y_train ) )
+    print("Test R2 : ", model.score( X_test_scaled, Y_test ) )
+
+# 3) 라쏘 모델 
+from sklearn.linear_model import Lasso
+lasso = Lasso( alpha=10 )   # 임의의 강도 지정 라쏘 모델 객체 생성
+lasso.fit(X_train_scaled, Y_train)
+print(lasso.score(X_train_scaled, Y_train))
+print(lasso.score(X_test_scaled , Y_test))
+# 제거된 특성 
+import numpy as np
+zero_features = np.sum( lasso.coef_ == 0 )
+print('기울기 0으로 제거된 특성 수 : ' , zero_features)     # 기울기 0으로 제거된 특성 수 :  6
+
+# 다항에서 StandardScaler( 표준화 핈 
+# 특성이 적으면 ( 과소적합 / 모델 단순 )--> 항추가 ( PolynomialFeatures) / degree
+# 특성이 많으면 ( 과대적합/모델 복잡 ) --> 규제 ( L1라쏘 , L2 릿지  ) / alpha
