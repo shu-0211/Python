@@ -36,9 +36,14 @@ sns.set_theme(font='Malgun Gothic', rc={'axes.unicode_minus': False}, style='whi
 sns.histplot( data=df , x='Age' , hue='Survived' , kde=True  )
 plt.show()
 # 5-4 (성별): sns.countplot을 사용하여 성별(Sex)에 따른 생존 여부(Survived)별 인원수를 시각화한다.
+sns.countplot(data=df , x='Sex' , hue='Survived')
+plt.show()
 # 5-5 (객실 등급): sns.countplot을 사용하여 객실 등급(Pclass)에 따른 생존 여부(Survived)별 인원수를 시각화한다.
+sns.countplot(data=df, x='Pclass' , hue='Survived')
+plt.show()
 # 5-6 (승선 항구): sns.countplot을 사용하여 승선 항구(Embarked)에 따른 생존 여부(Survived)별 인원수를 시각화한다.
-
+sns.countplot(data=df, x='Embarked', hue='Survived')
+plt.show()
 
 
 
@@ -54,29 +59,61 @@ plt.show()
 # # 3-1 : https://data.seoul.go.kr/dataList/OA-15182/F/1/datasetView.do
 # # https://drive.google.com/file/d/1tXfjwXu5HQUyKupqWeEiNk7ZlN0Xf7xw/view
 # # 3-2 : 2025년 1월, 2월 대여이력 CSV 파일 로드 (encoding='cp949')
+df = pd.read_csv('')
 
-# import pandas as pd
-# data1 = pd.read_csv('./서울특별시 공공자전거 대여이력 정보_2501.csv', encoding='cp949')
-# data2 = pd.read_csv('./서울특별시 공공자전거 대여이력 정보_2502.csv', encoding='cp949')
+
+import pandas as pd
+data1 = pd.read_csv('.practice/wok/서울특별시 공공자전거 대여이력 정보_2501.csv', encoding='cp949')
+data2 = pd.read_csv('.practice/wok/서울특별시 공공자전거 대여이력 정보_2502.csv', encoding='cp949')
 
 # # [4. 데이터 전처리 및 병합]
 # # 4-1 (병합): pd.concat을 사용하여 분리된 월별 데이터를 하나로 통합하고 인덱스를 재부여한다.
+df = pd.concat([data1,data2],axis=0, ignore_index=True )
+df.info()
 
 # # 4-2 (정제): 결측치의 문자열 표현('\N')을 None으로 치환하고, 성별 데이터를 대문자로 통일 및 결측치를 'U'로 보정한다.
 # df['이용시간(분)'] = df.to_numeric( df['이용시간(분)'] , erros = "coerce" ).fillna(0)
+df['성별'] = df['성별'].str.strip().replace(r'\n',None)
+df['성별'] = df['성별'].str.upper()
+df['성별'] = df['성별'].fillna('U')
+
+print(df['성별'])
 
 # # 4-3 (형변환): 이용시간, 거리 등 주요 수치형 변수는 pd.to_numeric으로 변환하고, 날짜 데이터는 pd.to_datetime으로 객체화한다.
+num = ['이용시간(분)','이용거리(M)']
+df[num] = df[num].apply(pd.to_numeric,errors='coerce').fillna(0)
+print(df[num])
+
+date=['대여일시','반납일시']
+df[date] = df[date].apply(pd.to_datetime,errors='coerce').fillna(0)
+print(df[date])
+
 # # 4-4 (파생변수): 대여일시에서 시간(Hour) 정보를 추출하여 '대여 시간대' 열을 새롭게 생성한다.
+df['대여시간대'] = df['대여일시'].dt.hour
+print(df['대여시간대'])
+
 
 # # [5. 데이터 시각화 및 분석]
-# import seaborn as sns
-# import matplotlib.pyplot as plt
-# plt.rc('font', family='Malgun Gothic')
-# plt.rcParams['axes.unicode_minus'] = False
-# sns.set_theme(font='Malgun Gothic', rc={'axes.unicode_minus': False}, style='whitegrid')
+import seaborn as sns
+import matplotlib.pyplot as plt
+plt.rc('font', family='Malgun Gothic')
+plt.rcParams['axes.unicode_minus'] = False
+sns.set_theme(font='Malgun Gothic', rc={'axes.unicode_minus': False}, style='whitegrid')
 
 
 # # 5-1 (성별 분포): sns.countplot을 사용하여 성별에 따른 따릉이 이용 비중을 시각화한다.
+sns.countplot(df,x='성별',hue='이용시간(분)' ,palette='Set2')
+plt.show()
 # # 5-2 (시간대 분석): sns.barplot을 사용하여 24시간 중 어느 시간대에 대여가 집중되는지 분석한다.
+sns.countplot(data=df, x="대여시간대", palette="coolwarm")
+plt.show()
 # # 5-3 (인기 대여소): value_counts().head(10)를 활용하여 가장 활발한 상위 10개 대여소를 가로 막대 그래프로 시각화한다.
+a = df['대여 대여소명'].value_counts().head(10)
+sns.barplot(x=a.values, y=a.index, palette='Blues_r')
+plt.show()
 # # 5-4 (상관관계): sns.heatmap을 통해 이용시간, 이용거리, 시간대 등 수치 데이터 간의 밀접도를 분석한다.
+numeric_df = df[['이용시간(분)','이용거리(M)','대여시간대']]
+corr_matrix = numeric_df.corr()
+
+sns.heatmap(corr_matrix,cmap="coolwarm",fmt='.2f',annot=True)
+plt.show()
