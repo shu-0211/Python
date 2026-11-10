@@ -65,7 +65,7 @@ param_grid = {
 
 # 3. k-fold 교차 검증 
 # kf = KFold( n_splits= K개의 동일한 폴드로 분할 , shuffle=True -> 분할시 무작위 섞기 여부 , random_state=42)
-kf = KFold( n_splits=5 ,shuffle=False , random_state=42 )
+kf = KFold( n_splits=5 ,shuffle=True , random_state=42 )
 # 학습 데이터들을 5개로 나누어 4개 학습하고 1개로 검증하는 과정을 5번 교차 검증 = 평균오차 / 손실
 
 # 4. 그리서치 cv = 교차검증과 다양한 파라미터 자동으로 실행하고 최적 성능 찾기 
@@ -90,3 +90,11 @@ print( grid.best_score_)    # 교차 검증을 통해 얻은 최고 점수
 # 7. 최적 모델로 평가 
 print( 'r2 : ' , best_model.score( X_train , Y_train ))
 print( 'r2 : ' , best_model.score( X_test , Y_test))
+
+# 11) 서빙 , 학습된 모델 저장하고 다른곳에서 호출
+# 연구 / 학습 : 코랩( 고사양 GPU )에서 학습 --> 실제 서버( FAST API )에서 호출
+import joblib
+# 1) 모델 저장한다. 
+# joblib.dump(저장할 모델 , 경로.pkl )
+joblib.dump( best_model , './day14/fish_model.pkl')  
+# 2. 다른 파이썬 파일에서 저장된 모델 불러오기 . s-05.py 
