@@ -6,3 +6,7 @@ import pandas as pd
 sample = pd.DataFrame({'Length2' : [32] , 'Height' : [10] , 'Width' : [4] } )
 predict = model.predict(sample)
 print( '예측값/무게 : ' , predict )
+
+
+# import joblib
+# model = joblib.load('../day16/model.pkl')

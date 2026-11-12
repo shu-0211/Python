@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="운동과 생활습관 정보를 입력하고 교육용 AI 모델의 운동 회복 점수를 확인하세요.">
+  <title>Recovery AI · 나의 운동 회복 점수 예측</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Recovery AI 홈"><span class="brand-mark" aria-hidden="true">↗</span> Recovery <span class="brand-ai">AI</span></a>
+      <span class="header-label"><span class="status-dot"></span> 머신러닝 기반 회복 점수 예측</span>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">MAKE ROOM FOR RECOVERY</p>
+        <h1 id="page-title">나의 운동 회복을,<br><span>점수로 살펴보세요.</span></h1>
+        <p class="intro-description">운동과 생활습관 정보를 입력해 보세요.<br class="mobile-break"> AI가 예상 운동 회복 점수를 계산해 드려요.</p>
+      </section>
+
+      <div class="workspace">
+        <section class="panel input-panel" aria-labelledby="input-title">
+          <div class="panel-heading"><div><p class="section-label">01 / YOUR ROUTINE</p><h2 id="input-title">운동·생활습관 입력</h2></div><button id="example-button" class="text-button" type="button">예시 입력 ↗</button></div>
+          <p class="panel-description">회복 점수를 예측하려면 8개 항목을 모두 입력해 주세요.</p>
+
+          <form id="prediction-form">
+            <fieldset id="input-fields">
+              <legend class="sr-only">운동 회복 점수 예측을 위한 8개 입력 항목</legend>
+              <div class="form-grid">
+                <div class="field"><label for="Age">나이 <span>Age</span></label><div class="input-wrap"><input id="Age" name="Age" type="number" min="1" step="1" required><span class="unit">세</span></div></div>
+                <div class="field"><label for="Gender">성별 <span>Gender</span></label><div class="input-wrap"><select id="Gender" name="Gender" required><option value="">선택</option><option value="Male">남성</option><option value="Female">여성</option></select></div></div>
+                <div class="field"><label for="Training_Duration_Min">운동 시간</label><div class="input-wrap"><input id="Training_Duration_Min" name="Training_Duration_Min" type="number" min="1" step="1" required aria-describedby="duration-help range-warning"><span class="unit">분</span></div><p id="duration-help" class="field-help">관측 범위 10~115분</p></div>
+                <div class="field"><label for="Training_Intensity">운동 강도 <span>1~10</span></label><div class="input-wrap"><input id="Training_Intensity" name="Training_Intensity" type="number" min="1" max="10" step="any" required><span class="unit">단계</span></div><p class="field-help">소수 입력 가능 · 예: 7.5</p></div>
+                <div class="field"><label for="Sleep_Duration_Hours">수면 시간 <span>Sleep</span></label><div class="input-wrap"><input id="Sleep_Duration_Hours" name="Sleep_Duration_Hours" type="number" min="0" max="24" step="any" required><span class="unit">시간</span></div><p class="field-help">관측 범위 5~9.5시간</p></div>
+                <div class="field"><label for="Stress_Level">스트레스 수준 <span>Stress</span></label><div class="input-wrap"><select id="Stress_Level" name="Stress_Level" required><option value="">선택</option><option value="Low">낮음</option><option value="Medium">보통</option><option value="High">높음</option></select></div></div>
+                <div class="field"><label for="Caffeine_Intake_mg">카페인 섭취량 <span>Caffeine</span></label><div class="input-wrap"><input id="Caffeine_Intake_mg" name="Caffeine_Intake_mg" type="number" min="0" step="1" required><span class="unit">mg</span></div><p class="field-help">0mg 허용 · 관측 범위 0~400mg</p></div>
+                <div class="field"><label for="Muscle_Soreness">근육통 정도 <span>1~10</span></label><div class="input-wrap"><input id="Muscle_Soreness" name="Muscle_Soreness" type="number" min="1" max="10" step="any" required><span class="unit">단계</span></div><p class="field-help">소수 입력 가능 · 예: 4.5</p></div>
+              </div>
+              <p id="range-warning" class="warning" role="status" hidden></p>
+            </fieldset>
+
+            <p id="error-message" class="error-message" role="alert" hidden></p>
+            <div class="form-actions"><button id="predict-button" class="primary-button" type="submit"><span id="button-label">회복 점수 예측하기</span><span id="button-icon" aria-hidden="true">↗</span></button><button id="reset-button" class="reset-button" type="button">전체 초기화</button></div>
+            <p class="privacy-note">입력한 정보와 예측 결과는 저장하지 않습니다.</p>
+          </form>
+        </section>
+
+        <aside class="result-column" aria-label="예측 결과 및 안내">
+          <section id="result-panel" class="panel result-panel" aria-labelledby="result-title" aria-busy="false">
+            <div class="result-top"><p class="section-label">02 / YOUR RESULT</p><span id="result-badge" class="result-badge">입력 대기</span></div>
+            <h2 id="result-title">예상 운동 회복 점수</h2>
+            <div class="result-live" aria-live="polite" aria-atomic="true">
+              <div class="score-value"><span id="recovery-value">—</span><span class="score-unit">/ 100점</span></div>
+              <p id="result-description" class="result-description">운동·생활습관 정보를 입력하고 예측을 시작해 보세요.</p>
+              <div class="gauge-block"><div class="gauge-track" aria-hidden="true"><div id="recovery-gauge" class="gauge-fill"></div></div><div class="gauge-labels"><span>0점</span><span>100점</span></div><p class="gauge-note">예측 점수 시각화 · 개인의 건강 상태에 대한 진단이 아니에요.</p></div>
+              <p id="clipping-note" class="warning" hidden></p>
+              <p id="server-warning" class="warning" hidden></p>
+              <div class="metric-row"><div><span class="metric-label">모델 R²</span><p>모델의 테스트 데이터 설명력</p></div><strong id="r2-value">—</strong></div>
+              <div id="mae-row" class="metric-row" hidden><div><span class="metric-label">모델 MAE</span><p>테스트 데이터의 평균 절대 오차</p></div><strong id="mae-value">—</strong></div>
+            </div>
+            <p class="result-footnote">실제 서버에서 반환한 예측값만 표시합니다.</p>
+          </section>
+
+          <section class="guide-card" aria-labelledby="guide-title"><span class="guide-icon" aria-hidden="true">i</span><div><h3 id="guide-title">알아두면 좋아요</h3><p>학습 데이터의 관측 범위를 벗어난 입력은 예측 오차가 커질 수 있어요.</p><p>R²는 별도 테스트 데이터에서 평가한 모델 성능을 나타내요.</p></div></section>
+          <section class="guide-card" aria-labelledby="items-title">
+            <div>
+              <h3 id="items-title">API 연결 확인</h3>
+              <ul id="sample-items" aria-live="polite"><li>상품 목록을 불러오는 중입니다.</li></ul>
+            </div>
+          </section>
+          <div class="flow-note"><span>입력</span><span aria-hidden="true">→</span><span>AI 모델 분석</span><span aria-hidden="true">→</span><span>결과 확인</span></div>
+        </aside>
+      </div>
+    </main>
+    <footer><span>Recovery AI</span><p>본 서비스는 교육용 합성 데이터를 기반으로 한 예측 모델이며, 실제 건강 상태에 대한 의학적 판단을 제공하지 않습니다.</p></footer>
+  </div>
+</body>
+</html>

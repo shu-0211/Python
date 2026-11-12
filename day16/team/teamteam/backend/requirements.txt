@@ -1,0 +1,11 @@
+# 구현 및 검증에 사용한 현재 가상환경 버전
+fastapi==0.162.5
+uvicorn==0.54.0
+pydantic==2.14.3
+pandas==3.1.0
+numpy==2.5.4
+scikit-learn==1.9.1
+joblib==1.6.0
+# test_backend.py 실행 시 사용
+httpx==0.28.1
+ 
