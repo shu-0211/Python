@@ -1,3 +1,14 @@
+# | 영어 속성명                | 한글 번역       |
+# | --------------------- | ----------- |
+# | Age                   | 나이          |
+# | Gender                | 성별          |
+# | Training_Duration_Min | 운동 시간(분)    |
+# | Training_Intensity    | 운동 강도       |
+# | Sleep_Duration_Hours  | 수면 시간(시간)   |
+# | Stress_Level          | 스트레스 수준     |
+# | Caffeine_Intake_mg    | 카페인 섭취량(mg) |
+# | Muscle_Soreness       | 근육통 정도      |
+
 import pandas as pd
 df = pd.read_csv('day16/team/calories.csv')
 
@@ -53,7 +64,7 @@ pipe_model = Pipeline([
     ])
 
 param_grid = { 
-    'poly__degree' : [ 2, 3] , 
+    'poly__degree' : [ 2, 3, 4, 5] , 
     'ridge__alpha' : [0.001 , 0.01 , 0.1 , 1 , 10 , 100]
 } 
 
