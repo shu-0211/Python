@@ -65,4 +65,42 @@ print( "Train Acc : " , model.score(X_train  , Y_train))
 print( "Test Acc : " , model.score(X_test  , Y_test))  
 # Train Acc :  0.787569751779873
 # Test Acc :  0.7946153846153846
-# 성능이 ( 5% ) 떨어짐 
+# 성능이 ( 5% ) 떨어짐  # 과도한 규제 -> 과소 적합
+
+# 5) 특성 중요도 : feature_importances_
+print( model.feature_names_in_ )
+print( model.feature_importances_ ) # 분류모델에서 예측에 기여한 특성의 중요도 수치 
+# ['alcohol' 'sugar' 'pH']
+# [0.06047705 0.92312892 0.01639403]
+
+
+# 6) 앙상블 : 배깅 또는 부스팅 방식으로 복합 모델 구현
+# 배깅 앙상블 : 랜덤포레스트 ( 여러 트리모델을 병렬 처리 하여 최적의 모델 찾기 )
+from sklearn.ensemble import RandomForestClassifier
+model = RandomForestClassifier(
+    max_depth=3 ,               # 트리의 최대 깊이 ( 과적합 억제 )
+    class_weight="balanced",    # 크래스 불균형 해소 ( 과적합 억제 )
+    n_estimators=10 ,           # 생성할 결정 트리 개수 기본값 100 , 1000~3000
+    max_features='sqrt' ,        # 각 노드에서 분할 시 특성의 최대 개수
+    random_state=42,
+    n_jobs= -1 , 
+)
+
+model.fit( X_train , Y_train )
+print( "Train Acc : " , model.score(X_train  , Y_train))
+print( "Test Acc : " , model.score(X_test  , Y_test))  
+# 트리 개수 100일때
+# Train Acc :  0.7852607273426977
+# Test Acc :  0.7738461538461539
+# 트리 개수 10일때
+# Train Acc :  0.817009813353858
+# Test Acc :  0.8007692307692308
+
+# max_features = 'sqrt' 사용하는 이유 : 분류에서 샘플을 사용할 때 샘플들을 전체 사용하지 않는다.
+# 총 4개인 경우 랜덤으로 4에서 제곱근 하여 2개만 사용한다. # 전체 샘플 사용시 과적합
+
+
+print( model.feature_names_in_ )
+print( model.feature_importances_ )
+# 특성 중요도 
+# [0.12894291 0.48896704 0.38209005]
