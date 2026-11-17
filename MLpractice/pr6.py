@@ -105,6 +105,8 @@ print( final_model.feature_names_in_ )
 print( final_model.feature_importances_ )
 
 
+
+
 # [단계 6] 모델 직렬화(저장/불러오기) 및 신규 고객 데이터 실시간 추론
 # 1. joblib.dump를 사용하여 최적화된 최종 모델을 './lgbm_insurance_model.pkl'로 저장하고, joblib.load로 다시 불러오세요.
 # 2. 신규 고객 2명의 원본 데이터(DataFrame)를 생성하세요:
