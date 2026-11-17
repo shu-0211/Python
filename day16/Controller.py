@@ -10,7 +10,7 @@ from Service import item_service
 
 # 1) 전체 조회 
 @router.get('/items')
-async def items( ) : 
+async def items() : 
     # 서비스내 함수 호출 
     return item_service.items()
 
