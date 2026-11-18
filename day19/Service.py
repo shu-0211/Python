@@ -41,8 +41,14 @@ class ModelService :
     # 받은 값을 모델에 넣고 쌀뭔지 확인
     @staticmethod
     def check( paramete ) : 
-        checkDf = pd.DataFrame( [paramete] )
+        # 모델 학습에 사용한 순서대로 입력 열을 맞춥니다.
+        checkDf = pd.DataFrame( [paramete] )[model.feature_names_in_]
         pred = model.predict(checkDf)
-        return pred.tolist()
+        proba = model.predict_proba(checkDf)[0]
+        probabilities = {
+            str(name): float(probability)
+            for name, probability in zip(model.classes_, proba)
+        }
+        return {"prediction": str(pred[0]), "probabilities": probabilities}
 
 model_service = ModelService()
