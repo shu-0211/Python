@@ -67,9 +67,11 @@ X_pca = pca.fit_transform(X_scaled)
 print( pca.components_.T )
 
 # Name: count, dtype: int64
-# [[ 0.56721122 -0.60697524]
-#  [ 0.48571362  0.79237469]
-#  [ 0.66509677 -0.06101971]]
+
+
+# [[ 0.56721122 -0.60697524]        tenure
+#  [ 0.48571362  0.79237469]        MonthlyCharges'
+#  [ 0.66509677 -0.06101971]]       'TotalCharges'
 
 X['PC1'] = X_pca[ : , 0]
 X['PC2'] = X_pca[ : , 1]
