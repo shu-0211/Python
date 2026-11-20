@@ -39,7 +39,7 @@ print( torch.relu(sample))      # tensor([0., 0., 3.])
 import torch
 x = torch.tensor(2.0)   # 특성값
 y = torch.tensor(1.0)   # 타겟값
-w = torch.tensor(0.3 , requires_grad=True) # 가중치
+w = torch.tensor(0.2 , requires_grad=True) # 가중치
 
 # requires_grad = True 속성은 기울기 기록
 b = torch.tensor(0.0 , requires_grad=True) # 편향
@@ -59,3 +59,21 @@ loss.backward()
 print( w.grad.item() , b.grad.item() )  # 가중치와 편향 영향 확인
 # 가중치 기울기 : -2.4   편향 기울기 : -1.2
 # -2.4000000953674316 -1.2000000476837158
+
+# 기울기 이용하여 가중치 / 편향 수정 ->1학습 
+with torch.no_grad():     # 기울기 기록을 일시 중지 블록 선언
+  # 경사 하강법 : 가중치 = 기존가중치 - ( 학습률 * 기울기 )
+  w -= Learning_rate * w.grad   # 0.2 - ( 0.1 * -2.4 ) -> 0.44
+  b -= Learning_rate * b.grad   # 0.0 - ( 0.1 * -1.2 ) -> 0.12
+  # 가중치 / 편향 기울기 0으로 초기화 ( 다시 계산 하기 위해 )
+  w.grad.zero_()
+  b.grad.zero_()
+print( '한번 업데이트 이후 가중치 : ' , w.item() , ' 편향 : ' , b.item() )
+print( w * x + b )
+
+# tensor(0.4000, grad_fn=<AddBackward0>)
+# tensor(0.4000, grad_fn=<ReluBackward0>)
+# tensor(0.3600, grad_fn=<MseLossBackward0>)
+# -2.4000000953674316 -1.2000000476837158
+# 한번 업데이트 이후 가중치 :  0.4399999976158142  편향 :  0.12000000476837158
+# tensor(1., grad_fn=<AddBackward0>)
