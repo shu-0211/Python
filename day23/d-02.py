@@ -1,3 +1,5 @@
+# [1] 신경망 ANN 이용한 이진분류
+
 import pandas as pd
 
 url = 'https://raw.githubusercontent.com/rickiepark/hg-mldl/master/wine.csv'
