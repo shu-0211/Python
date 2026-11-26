@@ -1,4 +1,4 @@
-# CNN실습시 필수: 코랩 오른쪽 상단에 -> 연결v 클릭하여 -> 런타임 유형 변경
+# CNN실습시 필수: 코랩 오른쪽 상단에   ->   연결v 클릭하여 -> 런타임 유형 변경
     # T4 GPU( 그래픽 사용 ) 클릭 -> 저장 -> 연결
 
 # 0) 실습에 필요한 데이터셋( SVHN 칼라의 0 부터 9 까지의 이미지 )
@@ -9,8 +9,9 @@ raw_test = datasets.SVHN( root='./data', split='test', download=True )
 
 # 미니 배치 사용 
 
-from torch.nn.modules.activation import ReLU
-from torch.nn.modules.linear import Linear
+from torch.nn.modules.activation import  ReLU
+from torch.nn.modules.linear  import Linear
+
 from torch.nn.modules.pooling import MaxPool2d
 # 0) GPU 연산 장치 설정
 import torch # 'cuda' : 엔비디아 그래픽 드라이버 이름
@@ -86,7 +87,7 @@ for epoch in range( 100 ) :
     if epoch % 10 == 0 :
         print( epoch,": loss: ", loss.item() )
 
-# 6) 모델 평가. model.train()학습모드 , model.eval() 평가/추론모드
+# 6) 모델 평가.  model.train()학습모드,  model.eval() 평가/추론모드
 model.eval()
 with torch.no_grad() :
     test_logits = model( X_test ) # 테스트용 학습하기( 기울기 업데이트 안함 )
@@ -98,7 +99,7 @@ print( accuracy_score( Y_test.cpu().numpy() , test_pred.cpu().numpy()  ) ) # 0.7
 
 
 # 1) 구글 코랩에서 업로드 
-from google.colab import files 
+from google.colab import  files 
 upload = files.upload ()        # 1. 코랩 업로드 가능 
 image_path = list(upload.keys())[0]  # 2. 업로드된 파일에 첫번째 파일경로 
 print( image_path )
@@ -164,7 +165,7 @@ model.fc = nn.Sequential(
     nn.Linear( in_features=in_features, out_features=128 ),
     nn.ReLU(), nn.Dropout( p=0.2 ) ,
 
-    # 출력층
+    # 출력층 
     nn.Linear(in_features=128 ,out_features=10 )
 ) 
 model = model.to(device)  # GPU 사용하라는 함수 
